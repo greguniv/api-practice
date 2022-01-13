@@ -2,6 +2,7 @@
   /* margin: 0;
   padding: 0; */
   background-color: lavender;
+  font-family: 'Dongle', sans-serif;
 }
 
 div {
@@ -9,4 +10,8 @@ div {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+h1 {
+  font-size: 250%;
 }

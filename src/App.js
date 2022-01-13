@@ -1,48 +1,65 @@
 import React, { Component } from 'react';
 import ArticleDetails from './components/ArticleDetails';
 
-//css
 import './App.css'
 
 class App extends Component {
 
 
-  // https://newsapi.org/v2/top-headlines?country=us&apiKey=API_KEY
   state = {
-    baseURL: 'https://newsapi.org/v2/top-headlines?',
-    query: 'country=us&',
-    apiKey: 'apiKey=' + '3e71275d24174a3cacef16ae0cb172eb',
-    title: '',
+    baseURL: 'https://newsapi.org/v2/everything?',
+    query: 'q=',
+    page: "&page=1",
+    pageSize: "&pageSize=3",
+    apiKey: '&apiKey=' + '3e71275d24174a3cacef16ae0cb172eb',   
+    title: '',  
     author: '',
     description: '',
     publishedAt: '',
     content: '',
-    searchURL: '',
-    newsInfo: {}
-  
+    url: '',
+    newsInfo: {},
   }
 
 
-  handleFetch = e =>{
+  handleChange = e => {
     this.setState({
-      searchURL: this.state.baseURL + this.state.query + this.state.apiKey
-    }, ()=> {
-      fetch(this.state.searchURL)
-      .then(response => response.json())
-      .then(data => this.setState({newsInfo: data}))
-      .catch(error => console.error(error))
+      [e.target.id]: e.target.value
     })
   }
+
  
+
+  handleFetch = e => {
+    e.preventDefault()
+    this.setState({
+      url: this.state.baseURL + this.state.query + this.state.title + this.state.page + this.state.pageSize + this.state.apiKey
+    }, () => {
+      fetch(this.state.url)
+        .then(response => response.json())
+        .then(data => this.setState({ newsInfo: data }))
+        .catch(error => console.error(error));
+    })
+  }
+
 
   render() {
     return (
-      <div>
+      <div className="newsResults">
+        <form onSubmit={this.handleFetch}>
+          <label htmlFor="title">Search Here</label>
+          <input
+            type="text"
+            id='title'
+            onChange={this.handleChange}
+            value={this.state.title}
+          />
+          <input type="submit" value='Get News' />
+        </form>
+        <a href={this.state.url}>{this.state.url}</a>
 
         <ArticleDetails newsInfo={this.state.newsInfo} />
-
-        <div className="button"><button onClick={this.handleFetch}>Get News</button></div>
-        
+      
       </div>
     );
   }
